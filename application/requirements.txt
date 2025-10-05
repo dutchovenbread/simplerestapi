@@ -1,0 +1,2 @@
+# Python standard library is sufficient for this simple REST API
+# No external dependencies required
