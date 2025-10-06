@@ -62,6 +62,7 @@ Resources:
                   - iam:GetInstanceProfile
                   - iam:AddRoleToInstanceProfile
                   - iam:RemoveRoleFromInstanceProfile
+                  - iam:*Tag*
                 Resource: '*'
 
 Outputs:
