@@ -153,6 +153,11 @@ Resources:
           
           # Update system
           yum update -y
+
+          # Install Nginx
+          amazon-linux-extras install -y nginx1
+          systemctl enable nginx
+          systemctl start nginx
           
           # Install Python 3 and pip
           yum install -y python3 python3-pip
