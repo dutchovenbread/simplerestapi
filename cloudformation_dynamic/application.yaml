@@ -35,8 +35,6 @@ Resources:
     Properties:
       BucketName: !Ref BucketName
       AccessControl: Private
-      VersioningConfiguration:
-        Status: Disabled
       Tags:
         - Key: Name
           Value: !Ref BucketName
