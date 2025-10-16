@@ -131,6 +131,7 @@ Resources:
   InstancePolicy:
     Type: AWS::IAM::Policy
     Properties:
+      PolicyName: SimpleRestApiS3AccessPolicy
       PolicyDocument:
         Version: '2012-10-17'
         Statement:
@@ -139,7 +140,6 @@ Resources:
               - s3:GetObject
             Resource:
               - arn:aws:s3:::simplerestapi-bucket-20251016/*
-      PolicyName: SimpleRestApiInstancePolicy
 
   InstanceProfile:
     Type: AWS::IAM::InstanceProfile
