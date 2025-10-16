@@ -14,11 +14,11 @@ Deploy this template manually before setting up the CI/CD pipeline:
 ```bash
 aws cloudformation deploy \
   --template-file cicd-role.yaml \
-  --stack-name github-actions-cicd-role \
+  --stack-name static-cicd-role \
   --capabilities CAPABILITY_NAMED_IAM \
-  --parameter-overrides \
-    GitHubOrg=dutchovenbread \
-    GitHubRepo=simplerestapi
+  --profile <profile name>
+  --region us-east-2
+
 ```
 
 After deployment, get the role ARN:
