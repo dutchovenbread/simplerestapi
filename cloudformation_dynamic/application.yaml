@@ -155,6 +155,7 @@ Resources:
           yum update -y
 
           # Copy dummy file from S3 bucket to /usr/share/nginx/html
+          mkdir -p /usr/share/nginx/html
           aws s3 cp s3://simplerestapi-bucket-20251016/dummy.html /usr/share/nginx/html/dummy.html
           
           # Copy second dummy file from S3 bucket to /usr/share/nginx/html/secondary
