@@ -48,6 +48,11 @@ Resources:
             Statement:
               - Effect: Allow
                 Action:
+                  - iam:CreatePolicy
+                  - iam:DeletePolicy
+                  - iam:GetPolicy
+                  - iam:ListPolicies
+                  - iam:ListPoliciesGrantingServiceAccess
                   - iam:CreateRole
                   - iam:DeleteRole
                   - iam:GetRole
