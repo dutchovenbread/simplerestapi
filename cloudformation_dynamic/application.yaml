@@ -123,9 +123,23 @@ Resources:
       ManagedPolicyArns:
         - arn:aws:iam::aws:policy/CloudWatchAgentServerPolicy
         - arn:aws:iam::aws:policy/AmazonSSMManagedInstanceCore
+        - !Ref InstancePolicy
       Tags:
         - Key: Name
           Value: SimpleRestApiInstanceRole
+
+  InstancePolicy:
+    Type: AWS::IAM::ManagedPolicy
+    Properties:
+      PolicyDocument:
+        Version: '2012-10-17'
+        Statement:
+          - Effect: Allow
+            Action:
+              - s3:GetObject
+            Resource:
+              - arn:aws:s3:::simplerestapi-bucket-20251016/*
+      PolicyName: SimpleRestApiInstancePolicy
 
   InstanceProfile:
     Type: AWS::IAM::InstanceProfile
@@ -168,7 +182,7 @@ Resources:
           
           # Copy second dummy file from S3 bucket to /usr/share/nginx/html/secondary
           mkdir -p /usr/share/nginx/html/secondary
-          aws s3 cp s3://simplerestapi-bucket-20251016/dummy2.html /usr/share/nginx/html/dummy2.html
+          aws s3 cp s3://simplerestapi-bucket-20251016/dummy2.html /usr/share/nginx/html/secondary/dummy2.html
 
           # Copy custom Nginx configuration from S3 bucket
           aws s3 cp s3://simplerestapi-bucket-20251016/webservice.conf /etc/nginx/conf.d/webservice.conf
