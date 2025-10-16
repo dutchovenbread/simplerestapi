@@ -129,7 +129,7 @@ Resources:
           Value: SimpleRestApiInstanceRole
 
   InstancePolicy:
-    Type: AWS::IAM::ManagedPolicy
+    Type: AWS::IAM::Policy
     Properties:
       PolicyDocument:
         Version: '2012-10-17'
