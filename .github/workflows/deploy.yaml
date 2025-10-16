@@ -28,6 +28,19 @@ jobs:
         with:
           role-to-assume: ${{ secrets.AWS_ROLE_ARN }}
           aws-region: ${{ env.AWS_REGION }}
+      - name: Verify AWS credentials
+        run: aws sts get-caller-identity
+      - name: Validate Bucket CloudFormation template
+        run: |
+          aws cloudformation validate-template \
+            --template-body file://cloudformation_dynamic/bucket.yaml
+      - name: Deploy S3 Bucket Stack
+        run: |
+          aws cloudformation deploy \
+            --template-file cloudformation_dynamic/bucket.yaml \
+            --stack-name simplerestapi-bucket \
+            --capabilities CAPABILITY_NAMED_IAM \
+            --parameter-overrides BucketName=simplerestapi-bucket-20251016
 
       - name: Validate CloudFormation template
         run: |

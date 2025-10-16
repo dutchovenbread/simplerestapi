@@ -21,29 +21,10 @@ Parameters:
     Description: EC2 Key Pair name (optional, for SSH access)
     Default: ''
 
-  BucketName:
-    Type: String
-    Description: S3 Bucket name for application data
-    Default: simplerestapi-bucket-20251012
-
 Conditions:
   HasKeyName: !Not [!Equals [!Ref KeyName, '']]
 
 Resources:
-  DeploymentBucket:
-    Type: AWS::S3::Bucket
-    Properties:
-      BucketName: !Ref BucketName
-      AccessControl: Private
-      Tags:
-        - Key: Name
-          Value: !Ref BucketName
-      BucketEncryption:
-        ServerSideEncryptionConfiguration:
-          - ServerSideEncryptionByDefault:
-              SSEAlgorithm: aws:kms
-            BucketKeyEnabled: true
-
   VPC:
     Type: AWS::EC2::VPC
     Properties:
