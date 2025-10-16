@@ -129,9 +129,8 @@ Resources:
           Value: SimpleRestApiInstanceRole
 
   InstancePolicy:
-    Type: AWS::IAM::Policy
+    Type: AWS::IAM::ManagedPolicy
     Properties:
-      PolicyName: SimpleRestApiS3AccessPolicy
       PolicyDocument:
         Version: '2012-10-17'
         Statement:
