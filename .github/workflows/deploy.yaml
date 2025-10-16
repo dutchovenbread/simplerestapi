@@ -46,8 +46,12 @@ jobs:
         run: |
           aws cloudformation validate-template \
             --template-body file://cloudformation_dynamic/application.yaml
-
-      - name: Deploy CloudFormation stack
+      - name: Copy Files to S3 Bucket
+        run: |
+          aws s3 cp application/static_files/dummy.html s3://simplerestapi-bucket-20251016/dummy.html
+          aws s3 cp application/static_files/dummy2.html s3://simplerestapi-bucket-20251016/dummy2.html
+          aws s3 cp application/configuration/webservice.conf s3://simplerestapi-bucket-20251016/webservice.conf
+      - name: Deploy CloudFormation stack for application
         run: |
           aws cloudformation deploy \
             --template-file cloudformation_dynamic/application.yaml \
