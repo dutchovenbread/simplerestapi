@@ -184,7 +184,7 @@ Resources:
           aws s3 cp s3://simplerestapi-bucket-20251016/dummy2.html /usr/share/nginx/html/secondary/dummy2.html
 
           # Copy custom Nginx configuration from S3 bucket
-          aws s3 cp s3://simplerestapi-bucket-20251016/webservice.conf /etc/nginx/conf.d/webservice.conf
+          aws s3 cp s3://simplerestapi-bucket-20251016/webservice.conf /etc/nginx/default.d/webservice.conf
           systemctl restart nginx
 
           # Create application directory
