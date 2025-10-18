@@ -51,6 +51,8 @@ jobs:
           aws s3 cp application/static_files/dummy.html s3://simplerestapi-bucket-20251016/dummy.html
           aws s3 cp application/static_files/dummy2.html s3://simplerestapi-bucket-20251016/dummy2.html
           aws s3 cp application/configuration/webservice.conf s3://simplerestapi-bucket-20251016/webservice.conf
+          aws s3 cp application/app.py s3://simplerestapi-bucket-20251016/app.py
+          aws s3 cp application/requirements.txt s3://simplerestapi-bucket-20251016/requirements.txt
       - name: Deploy CloudFormation stack for application
         run: |
           aws cloudformation deploy \
