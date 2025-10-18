@@ -191,18 +191,10 @@ Resources:
           mkdir -p /opt/simplerestapi
           cd /opt/simplerestapi
           
-          # Create a placeholder for the application
-          cat > app.py << 'EOF'
-          from flask import Flask
-          app = Flask(__name__)
-
-          @app.route('/')
-          def home():
-              return {'status': 'ok', 'message': 'Simple REST API is running'}
-
-          if __name__ == '__main__':
-              app.run(host='0.0.0.0', port=8080)
-          EOF
+          # Deploy the application to a location
+          aws s3 cp s3://simplerestapi-bucket-20251016/app.py /opt/simplerestapi/app.py
+          aws s3 cp s3://simplerestapi-bucket-20251016/requirements.txt /opt/simplerestapi/requirements.txt
+          pip3 install -r requirements.txt
           
           # Create systemd service
           cat > /etc/systemd/system/simplerestapi.service << 'EOF'
