@@ -101,7 +101,7 @@ Resources:
       Tags:
         - Key: Name
           Value: SimpleRestApiInstance
-
+Outputs:
   InstanceId:
     Description: EC2 Instance ID
     Value: !Ref EC2Instance
