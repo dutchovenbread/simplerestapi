@@ -1,95 +1,76 @@
-# Simple REST API
+# Simple REST API Deployment on AWS
 
-A simple REST API deployed through a DevOps pipeline to AWS using GitHub Actions and CloudFormation.
+This project deploys a simple REST API application on AWS using CloudFormation.  
+It now uses Nginx as the web server and includes an S3 bucket for application data.
 
-## Project Structure
+## Features
+
+- **EC2 Instance**: Deployed in a public subnet, with Nginx installed and configured.
+- **Nginx**: Serves static content from `/usr/share/nginx/html` and `/usr/share/nginx/html/secondary` via custom config (`webservice.conf`).
+- **S3 Bucket**: Encrypted with AWS KMS and bucket key, deployed via a separate CloudFormation stack.
+- **IAM Roles & Policies**: EC2 instance profile with permissions to access the S3 bucket.
+- **Security Groups**: Allow HTTP (80), HTTPS (443), and application traffic (8080).
+- **GitHub Actions OIDC**: IAM role for CI/CD deployments from GitHub Actions.
+
+## Directory Structure
 
 ```
-.
-├── application/              # Python REST API application
-│   ├── app.py               # Main application code
-│   ├── requirements.txt     # Python dependencies
-│   └── README.md            # Application documentation
-├── cloudformation_static/   # CloudFormation for manual deployment
-│   ├── cicd-role.yaml      # CI/CD IAM role template
-│   └── README.md           # Static templates documentation
-├── cloudformation_dynamic/  # CloudFormation for automated deployment
-│   ├── application.yaml    # Application infrastructure template
-│   └── README.md           # Dynamic templates documentation
-└── .github/workflows/      # GitHub Actions workflows
-    └── deploy.yaml         # CI/CD deployment workflow
+cloudformation_dynamic/
+  application.yaml      # VPC, subnet, security group, IAM roles/policies
+  bucket.yaml           # S3 bucket resource
+
+cloudformation_static/
+  cicd-role.yaml        # GitHub Actions OIDC provider and deployment role
+
+application/
+  configuration/
+    webservice.conf     # Nginx config for custom routing
 ```
 
-## Architecture
+## Nginx Custom Routing
 
-The application is deployed on a single EC2 instance with:
-- Public IP address for direct access
-- VPC with public subnet and Internet Gateway
-- Security groups allowing HTTP/HTTPS and custom port 8080
-- Systemd service for automatic application startup
-- IAM role with CloudWatch and SSM permissions
+- Requests to `/other/filename.html` are served from `/usr/share/nginx/html/secondary/filename.html`.
+- Requests to `/sws/` are proxied to `localhost:8080`.
 
-## Setup
+## Deployment
 
-### 1. Deploy CI/CD Role (One-time Setup)
+1. **S3 Bucket Stack**  
+   Deploy with:
+   ```
+   aws cloudformation deploy \
+     --template-file cloudformation_dynamic/bucket.yaml \
+     --stack-name simplerestapi-bucket \
+     --capabilities CAPABILITY_NAMED_IAM \
+     --parameter-overrides BucketName=simplerestapi-bucket-20251016
+   ```
 
-First, manually deploy the CloudFormation stack that creates the GitHub Actions role:
+2. **Application Stack**  
+   Deploy with:
+   ```
+   aws cloudformation deploy \
+     --template-file cloudformation_dynamic/application.yaml \
+     --stack-name simplerestapi-app \
+     --capabilities CAPABILITY_NAMED_IAM
+   ```
 
-```bash
-cd cloudformation_static
-aws cloudformation deploy \
-  --template-file cicd-role.yaml \
-  --stack-name github-actions-cicd-role \
-  --capabilities CAPABILITY_NAMED_IAM \
-  --parameter-overrides \
-    GitHubOrg=dutchovenbread \
-    GitHubRepo=simplerestapi
-```
+3. **CI/CD Role Stack**  
+   Deploy with:
+   ```
+   aws cloudformation deploy \
+     --template-file cloudformation_static/cicd-role.yaml \
+     --stack-name simplerestapi-cicd-role \
+     --capabilities CAPABILITY_NAMED_IAM
+   ```
 
-Get the role ARN:
+4. **Testing**
+    Visit "http://<ipaddress>/sws/ to make sure the web service responds.
 
-```bash
-aws cloudformation describe-stacks \
-  --stack-name github-actions-cicd-role \
-  --query 'Stacks[0].Outputs[?OutputKey==`RoleArn`].OutputValue' \
-  --output text
-```
+## Notes
 
-### 2. Configure GitHub Secrets
+- Update `webservice.conf` as needed for custom Nginx routing.
+- Ensure your EC2 instance has access to the S3 bucket via IAM policy.
+- Check security group rules for required ports.
 
-Add the following secret to your GitHub repository:
-- `AWS_ROLE_ARN`: The ARN from the previous step
+---
 
-### 3. Deploy Application
-
-Push code to the `main` branch or manually trigger the workflow to deploy the application.
-
-## API Endpoints
-
-Once deployed, the API provides:
-
-- `GET /` - API status and available endpoints
-- `GET /health` - Health check endpoint
-
-## Local Development
-
-To run the application locally:
-
-```bash
-cd application
-python3 app.py
-```
-
-Access the API at `http://localhost:8080`
-
-## CI/CD Pipeline
-
-The GitHub Actions workflow automatically:
-1. Validates the CloudFormation template
-2. Deploys/updates the infrastructure stack
-3. Updates the application code on the EC2 instance
-4. Verifies the deployment
-
-## License
-
-Apache License 2.0 - See LICENSE file for details
+For questions or further customization, see the CloudFormation templates or contact the repository maintainer.
