@@ -1,5 +1,5 @@
 import json
-from datetime import datetime, timedelta
+from datetime import datetime, timedelta, UTC
 
 import pytest
 
@@ -10,7 +10,7 @@ test_data = [
   (52.5200, 13.4050, 34.5, datetime(2024, 9, 26, 12, 34, 56)),
   (-33.8688, 151.2093, 10.0, datetime(2024, 8, 10, 8, 30, 0)),
   (40.7128, -74.0060, 5.2, datetime(2025, 1, 1, 0, 0, 0)),
-  (35.6895, 139.6917, 40.1, datetime.utcnow() + timedelta(days=1))  # Future date with timedelta
+  (35.6895, 139.6917, 40.1, datetime.now(UTC) + timedelta(days=1))  # Future date with timedelta
 ]
 
 @pytest.mark.parametrize("lat, lon, ele, time", test_data)
