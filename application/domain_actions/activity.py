@@ -86,10 +86,25 @@ class Activity:
     a_type = data['a_type']
     return cls(name=name, date=date, segments=segments, a_type=a_type)
 
-
-def gpx_to_activity(gpx_file_path):
-  """Convert a GPX file to an Activity object."""
+def get_tree_from_gpx_file(gpx_file_path):
+  """Parse a GPX file and return its XML tree."""
   tree = ET.parse(gpx_file_path)
+  return tree
+
+def get_tree_from_gpx_string(gpx_string):
+  """Parse a GPX string and return its XML tree."""
+  root = ET.fromstring(gpx_string)
+  tree = ET.ElementTree(root)
+  return tree
+
+
+def gpx_to_activity(gpx_file_path, path_not_string=True):
+  """Convert a GPX file to an Activity object."""
+  if path_not_string:
+    tree = get_tree_from_gpx_file(gpx_file_path)
+  else:
+    tree = get_tree_from_gpx_string(gpx_file_path)
+
   root = tree.getroot()
 
   # Extract metadata
