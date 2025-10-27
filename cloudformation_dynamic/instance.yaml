@@ -53,8 +53,10 @@ Resources:
           systemctl enable nginx
           systemctl start nginx
           
-          # Install Python 3 and pip
+          # Install Python 3 and pip, upgrade pip, install venv, create venv, enable venv
           yum install -y python3 python3-pip
+          /usr/bin/python3 -m pip install --upgrade pip setuptools wheel virtualenv
+
 
           # Copy dummy file from S3 bucket to /usr/share/nginx/html
           mkdir -p /usr/share/nginx/html
@@ -75,7 +77,8 @@ Resources:
           # Deploy the application to a location
           aws s3 cp s3://simplerestapi-bucket-20251016/app.py /opt/simplerestapi/app.py
           aws s3 cp s3://simplerestapi-bucket-20251016/requirements.txt /opt/simplerestapi/requirements.txt
-          pip3 install -r requirements.txt
+          python3 -m venv /opt/simplerestapi/venv
+          /opt/simplerestapi/venv/pip install -r requirements.txt
           
           # Create systemd service
           cat > /etc/systemd/system/simplerestapi.service << 'EOF'
@@ -87,7 +90,7 @@ Resources:
           Type=simple
           User=root
           WorkingDirectory=/opt/simplerestapi
-          ExecStart=/usr/bin/python3 /opt/simplerestapi/app.py
+          ExecStart=/opt/simplerestapi/venv/bin/python3 /opt/simplerestapi/app.py
           Restart=always
           
           [Install]
