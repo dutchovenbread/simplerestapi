@@ -84,7 +84,8 @@ Resources:
           aws s3 cp s3://simplerestapi-bucket-20251016/requirements.txt /opt/simplerestapi/requirements.txt
           echo "create virtualenv and install all requirements......"
           python3 -m venv /opt/simplerestapi/venv
-          /opt/simplerestapi/venv/pip install -r requirements.txt
+          /opt/simplerestapi/venv/bin/python3 -m pip install --upgrade pip
+          /opt/simplerestapi/venv/bin/pip install -r requirements.txt
 
           echo "Start the simplerestapi executable......"
           
