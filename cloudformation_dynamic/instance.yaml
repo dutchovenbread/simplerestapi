@@ -89,7 +89,8 @@ Resources:
           aws s3 cp s3://simplerestapi-bucket-20251016/app.py /opt/simplerestapi/app.py
           aws s3 cp s3://simplerestapi-bucket-20251016/wsgi.py /opt/simplerestapi/wsgi.py
           aws s3 cp s3://simplerestapi-bucket-20251016/requirements.txt /opt/simplerestapi/requirements.txt
-          aws s3 cp s3://simplerestapi-bucket-20251016/myproject.service /etc/systemd/system/myproject.service 
+          aws s3 cp s3://simplerestapi-bucket-20251016/myproject.service /etc/systemd/system/myproject.service
+          aws s3 cp s3://simplerestapi-bucket-20251016/myproject.socket /etc/systemd/system/myproject.socket
           echo "create virtualenv and install all requirements......"
           python3 -m venv /opt/simplerestapi/venv
           /opt/simplerestapi/venv/bin/python3 -m pip install --upgrade pip
@@ -119,8 +120,13 @@ Resources:
           
           # Enable and start the service
           systemctl daemon-reload
-          systemctl enable simplerestapi
-          systemctl start simplerestapi
+          systemctl enable myproject.socket
+          systemctl start myproject.socket
+          systemctl start myproject.service
+          systemctl start myproject.service
+
+          systemctl status myproject.socket
+          systemctl status myproject.service
       Tags:
         - Key: Name
           Value: SimpleRestApiInstance
