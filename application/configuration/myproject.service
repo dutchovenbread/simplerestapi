@@ -1,0 +1,13 @@
+[Unit]
+Description=Gunicorn instance to serve myproject
+After=network.target
+
+[Service]
+User=gunicorn_user
+Group=gunicorn_group
+WorkingDirectory=/opt/simplerestapi
+Environment="PATH=/opt/simplerestapi"
+ExecStart=/opt/simplerestapi/venv/bin/gunicorn --workers 3 --bind unix:myproject.sock wsgi:app
+
+[Install]
+WantedBy=multi-user.target

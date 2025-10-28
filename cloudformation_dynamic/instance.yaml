@@ -52,6 +52,12 @@ Resources:
 
           systemctl enable nginx
           systemctl start nginx
+
+          #User creation
+          adduser --system --no-create-home gunicorn_user
+          groupadd --system gunicorn_group
+          usermod -aG gunicorn_group gunicorn_user
+
           
           # Install Python 3 and pip, upgrade pip, install venv, create venv, enable venv
           echo "Install Python......"
@@ -81,11 +87,16 @@ Resources:
           
           # Deploy the application to a location
           aws s3 cp s3://simplerestapi-bucket-20251016/app.py /opt/simplerestapi/app.py
+          aws s3 cp s3://simplerestapi-bucket-20251016/wsgi.py /opt/simplerestapi/wsgi.py
           aws s3 cp s3://simplerestapi-bucket-20251016/requirements.txt /opt/simplerestapi/requirements.txt
+          aws s3 cp s3://simplerestapi-bucket-20251016/myproject.service /etc/systemd/system/myproject.service 
           echo "create virtualenv and install all requirements......"
           python3 -m venv /opt/simplerestapi/venv
           /opt/simplerestapi/venv/bin/python3 -m pip install --upgrade pip
           /opt/simplerestapi/venv/bin/pip install -r requirements.txt
+
+          #Change owner of files to gunicorn_user
+          sudo chown -R gunicorn_user:gunicorn_group /opt/simplerestapi
 
           echo "Start the simplerestapi executable......"
           
