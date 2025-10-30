@@ -91,6 +91,7 @@ Resources:
           aws s3 cp s3://simplerestapi-bucket-20251016/requirements.txt /opt/simplerestapi/requirements.txt
           aws s3 cp s3://simplerestapi-bucket-20251016/myproject.service /etc/systemd/system/myproject.service
           aws s3 cp s3://simplerestapi-bucket-20251016/myproject.socket /etc/systemd/system/myproject.socket
+          aws s3 cp s3://simplerestapi-bucket-20251016/nginx.conf /etc/nginx/nginx.conf
           echo "create virtualenv and install all requirements......"
           python3 -m venv /opt/simplerestapi/venv
           /opt/simplerestapi/venv/bin/python3 -m pip install --upgrade pip
