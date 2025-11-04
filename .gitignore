@@ -49,3 +49,6 @@ htmlcov/
 # Temporary files
 tmp/
 *.tmp
+
+# app
+UPLOAD_FOLDER
