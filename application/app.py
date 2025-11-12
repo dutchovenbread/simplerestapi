@@ -12,11 +12,10 @@ ALLOWED_EXTENSIONS = ["xml","txt"]
 def hello():
   return "<h1 style='color:blue'>Hello There!</h1>"
 
-@app.route("/health/")
+@app.route("/health")
 def health():
   return"<h1>Health check passes</h1>"
-if __name__ == "__main__":
-    app.run(host='0.0.0.0')
+
 
 def allowed_file(filename):
   return '.' in filename and \
@@ -36,7 +35,7 @@ def upload():
     if file and allowed_file(file.filename):
       filename = secure_filename(file.filename)
       file.save(os.path.join('UPLOAD_FOLDER', filename))
-      return redirect(url_for("/"))
+      return redirect(url_for("upload"))
   return '''
     <!doctype html>
     <title>Upload new File</title>

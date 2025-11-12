@@ -56,17 +56,33 @@ Resources:
           systemctl enable nginx
           systemctl start nginx
 
+          # Install Python 3 and pip, upgrade pip, install venv, create venv, enable venv
+          echo "Install Python......"
+          yum install -y python3 python3-pip
+          # echo "Install virtualenv......"
+          /usr/bin/python3 -m pip install --upgrade virtualenv
+
+          # # Create application directory
+          # echo "get more resources from s3......"
+          mkdir -p /opt/simplerestapi
+          cd /opt/simplerestapi
+          mkdir UPLOAD_FOLDER
+          # echo "create virtualenv and install all requirements......"
+          python3 -m venv /opt/simplerestapi/venv
+          /opt/simplerestapi/venv/bin/python3 -m pip install --upgrade pip
+          aws s3 cp s3://simplerestapi-bucket-20251016/requirements.txt /opt/simplerestapi/requirements.txt
+          /opt/simplerestapi/venv/bin/pip install -r requirements.txt
+
+          # Deploy the application to a location
+          aws s3 cp s3://simplerestapi-bucket-20251016/app.py /opt/simplerestapi/app.py
+
+
           # #User creation
           # adduser --system --no-create-home gunicorn_user
           # groupadd --system gunicorn_group
           # usermod -aG gunicorn_group gunicorn_user
 
           
-          # # Install Python 3 and pip, upgrade pip, install venv, create venv, enable venv
-          # echo "Install Python......"
-          # yum install -y python3 python3-pip
-          # echo "Install virtualenv......"
-          # /usr/bin/python3 -m pip install --upgrade virtualenv
 
 
           # # Copy dummy file from S3 bucket to /usr/share/nginx/html
@@ -80,22 +96,14 @@ Resources:
 
 
 
-          # # Create application directory
-          # echo "get more resources from s3......"
-          # mkdir -p /opt/simplerestapi
-          # cd /opt/simplerestapi
+
           
-          # # Deploy the application to a location
-          # aws s3 cp s3://simplerestapi-bucket-20251016/app.py /opt/simplerestapi/app.py
+
           # aws s3 cp s3://simplerestapi-bucket-20251016/wsgi.py /opt/simplerestapi/wsgi.py
-          # aws s3 cp s3://simplerestapi-bucket-20251016/requirements.txt /opt/simplerestapi/requirements.txt
+
           # aws s3 cp s3://simplerestapi-bucket-20251016/myproject.service /etc/systemd/system/myproject.service
           # aws s3 cp s3://simplerestapi-bucket-20251016/myproject.socket /etc/systemd/system/myproject.socket
 
-          # echo "create virtualenv and install all requirements......"
-          # python3 -m venv /opt/simplerestapi/venv
-          # /opt/simplerestapi/venv/bin/python3 -m pip install --upgrade pip
-          # /opt/simplerestapi/venv/bin/pip install -r requirements.txt
 
           # #Change owner of files to gunicorn_user
           # sudo chown -R gunicorn_user:gunicorn_group /opt/simplerestapi
