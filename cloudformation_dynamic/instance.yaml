@@ -66,6 +66,7 @@ Resources:
           # echo "get more resources from s3......"
           mkdir -p /opt/simplerestapi
           cd /opt/simplerestapi
+          mkdir UPLOAD_FOLDER
           # echo "create virtualenv and install all requirements......"
           python3 -m venv /opt/simplerestapi/venv
           /opt/simplerestapi/venv/bin/python3 -m pip install --upgrade pip
