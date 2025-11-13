@@ -90,6 +90,7 @@ Resources:
           systemctl daemon-reload
           systemctl enable myproject.socket
           systemctl start myproject.socket
+          systemctl enable myproject.service
           systemctl start myproject.service
 
 
