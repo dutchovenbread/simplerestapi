@@ -58,6 +58,8 @@ Resources:
           # Install Python 3 and pip, upgrade pip, install venv, create venv, enable venv
           echo "Install Python......"
           yum install -y python3 python3-pip
+          yum groupinstall -y "Development Tools"
+          yum install -y python-devel
           # echo "Install virtualenv......"
           /usr/bin/python3 -m pip install --upgrade virtualenv
 
