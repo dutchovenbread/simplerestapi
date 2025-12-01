@@ -58,6 +58,8 @@ Resources:
           # Install Python 3 and pip, upgrade pip, install venv, create venv, enable venv
           echo "Install Python......"
           yum install -y python3 python3-pip
+          yum groupinstall -y "Development Tools"
+          yum install -y python-devel
           # echo "Install virtualenv......"
           /usr/bin/python3 -m pip install --upgrade virtualenv
 
@@ -66,6 +68,8 @@ Resources:
           mkdir -p /opt/simplerestapi
           cd /opt/simplerestapi
           mkdir UPLOAD_FOLDER
+          mkdir test_files
+          cat "Hello world." >> ./test_files/hello.txt
           # echo "create virtualenv and install all requirements......"
           python3 -m venv /opt/simplerestapi/venv
           /opt/simplerestapi/venv/bin/python3 -m pip install --upgrade pip
@@ -85,7 +89,11 @@ Resources:
 
           aws s3 cp s3://simplerestapi-bucket-20251016/myproject.service /etc/systemd/system/myproject.service
           aws s3 cp s3://simplerestapi-bucket-20251016/myproject.socket /etc/systemd/system/myproject.socket
-          
+
+          # #Change owner of files to gunicorn_user
+          mkdir /opt/simplerestapi/logs
+          sudo chown -R gunicorn_user:gunicorn_group /opt/simplerestapi
+
           # Enable and start the service
           systemctl daemon-reload
           systemctl enable myproject.socket
@@ -109,8 +117,7 @@ Resources:
 
 
 
-          # #Change owner of files to gunicorn_user
-          sudo chown -R gunicorn_user:gunicorn_group /opt/simplerestapi
+
 
           # echo "Start the simplerestapi executable......"
           

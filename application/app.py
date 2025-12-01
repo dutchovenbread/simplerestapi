@@ -19,11 +19,13 @@ ALLOWED_EXTENSIONS = ["xml","txt","json"]
 
 @app.route("/")
 def hello():
-  return "<h1 style='color:blue'>Hello There!</h1>"
+  print("The root was requested",flush=True)
+  return "<h1 style='color:blue'>Hello There!</h1>\n"
 
 @app.route("/health")
 def health():
-  return"<h1>Health check passes</h1>"
+  print("Health check was requested",flush=True)
+  return"<h1>Health check passes</h1>\n"
 
 
 def allowed_file(filename):
@@ -34,7 +36,7 @@ def allowed_file(filename):
 @app.route("/upload", methods=['GET', 'POST'])
 def upload():
   try:
-    print(request)
+    print(request,flush=True)
     if request.method == "POST":
       if 'file' not in request.files:
         flash('No file part')

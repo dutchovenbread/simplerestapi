@@ -3,11 +3,13 @@ Description=Gunicorn instance to serve myproject
 After=network.target
 
 [Service]
+Type=simple
 User=gunicorn_user
 Group=gunicorn_group
 WorkingDirectory=/opt/simplerestapi
 Environment="PATH=/opt/simplerestapi"
-ExecStart=/opt/simplerestapi/venv/bin/gunicorn --workers 3 --bind unix:/run/gunicorn.sock wsgi:app
+ExecStart=/opt/simplerestapi/venv/bin/gunicorn --workers 3 --bind unix:/run/gunicorn.sock wsgi:app --log-level debug --access-logfile /opt/simplerestapi/logs/access.log --error-logfile /opt/simplerestapi/logs/error.log --capture-output
+Restart=always
 
 [Install]
 WantedBy=multi-user.target
