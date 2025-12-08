@@ -69,36 +69,44 @@ Resources:
           echo "Install Python......"
           sudo yum install -y python3 python3-pip python-devel
           sudo yum groupinstall -y "Development Tools"
-          sudo /usr/bin/python3 -m pip install --upgrade pip
+
           sudo /usr/bin/python3 -m pip install --upgrade virtualenv
 
           # start doing app-specific things
           echo "Create application directory......"
           sudo mkdir -p /opt/simplerestapi
-          chown uwsgi_user:uwsgi_group /opt/simplerestapi
+          sudo chown uwsgi_user:uwsgi_group /opt/simplerestapi
           cd /opt/simplerestapi
           sudo -u uwsgi_user mkdir UPLOAD_FOLDER
           sudo -u uwsgi_user mkdir test_files
           sudo -u uwsgi_user bash -c 'echo "Hello world." >> ./test_files/hello.txt'
           echo "Create virtualenv and install all requirements......"
-          sudo su - uwsgi_user -c "/usr/bin/python3 -m venv /opt/simplerestapi/venv"
-          sudo su - uwsgi_user -c "/opt/simplerestapi/venv/bin/python3 -m pip install --upgrade pip"
-          sudo su - uwsgi_user -c "aws s3 cp s3://simplerestapi-bucket-20251016/requirements.txt /opt/simplerestapi/requirements.txt"
-          sudo su - uwsgi_user -c "/opt/simplerestapi/venv/bin/pip install -r /opt/simplerestapi/requirements.txt"
+          sudo -u uwsgi_user /usr/bin/python3 -m venv /opt/simplerestapi/venv
+          sudo -u uwsgi_user /opt/simplerestapi/venv/bin/python3 -m pip install --upgrade pip
+          sudo -u uwsgi_user aws s3 cp s3://simplerestapi-bucket-20251016/requirements.txt /opt/simplerestapi/requirements.txt
+          sudo -u uwsgi_user /opt/simplerestapi/venv/bin/pip install -r /opt/simplerestapi/requirements.txt
           echo "Deploy application files......"
-          sudo su - uwsgi_user -c "aws s3 cp s3://simplerestapi-bucket-20251016/app.py /opt/simplerestapi/app.py"
-          sudo su - uwsgi_user -c "aws s3 cp s3://simplerestapi-bucket-20251016/wsgi.py /opt/simplerestapi/wsgi.py"        
+          sudo -u uwsgi_user aws s3 cp s3://simplerestapi-bucket-20251016/app.py /opt/simplerestapi/app.py
+          sudo -u uwsgi_user aws s3 cp s3://simplerestapi-bucket-20251016/wsgi.py /opt/simplerestapi/wsgi.py
+          aws s3 cp  s3://simplerestapi-bucket-20251016/uwsgi.service /etc/systemd/system/uwsgi.service
+          aws s3 cp s3://simplerestapi-bucket-20251016/uwsgi.socket /etc/systemd/system/uwsgi.socket
+          sudo -u uwsgi_user touch /opt/simplerestapi/app_errors.log
+
+          ## Note: command for running wsgi manually for testing on port 8000
+          ## sudo -u uwsgi_user /opt/simplerestapi/venv/bin/uwsgi --socket :8000 --protocol http --wsgi-file wsgi.py --callable app     
+
+          echo "Start uWSGI service......"
+          systemctl daemon-reload
+          systemctl enable uwsgi.socket
+          systemctl start uwsgi.socket
+          systemctl enable uwsgi.service
+          systemctl start uwsgi.service
 
 
 
 
 
 
-
-          # Deploy the application to a location
-          #aws s3 cp s3://simplerestapi-bucket-20251016/app.py /opt/simplerestapi/app.py
-
-          #aws s3 cp s3://simplerestapi-bucket-20251016/wsgi.py /opt/simplerestapi/wsgi.py
 
           #aws s3 cp s3://simplerestapi-bucket-20251016/myproject.service /etc/systemd/system/myproject.service
           #aws s3 cp s3://simplerestapi-bucket-20251016/myproject.socket /etc/systemd/system/myproject.socket

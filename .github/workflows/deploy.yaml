@@ -73,6 +73,8 @@ jobs:
           aws s3 cp application/configuration/webservice.conf s3://simplerestapi-bucket-20251016/webservice.conf
           aws s3 cp application/configuration/myproject.service s3://simplerestapi-bucket-20251016/myproject.service
           aws s3 cp application/configuration/myproject.socket s3://simplerestapi-bucket-20251016/myproject.socket
+          aws s3 cp application/configuration/uwsgi.service s3://simplerestapi-bucket-20251016/uwsgi.service
+          aws s3 cp application/configuration/uwsgi.sockt s3://simplerestapi-bucket-20251016/uwsgi.socket
           
           aws s3 cp application/configuration/nginx.conf s3://simplerestapi-bucket-20251016/nginx.conf
 
