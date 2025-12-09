@@ -93,7 +93,7 @@ Resources:
           sudo -u uwsgi_user touch /opt/simplerestapi/app_errors.log
 
           ## Note: command for running wsgi manually for testing on port 8000
-          ## sudo -u uwsgi_user /opt/simplerestapi/venv/bin/uwsgi --socket :8000 --protocol http --wsgi-file wsgi.py --callable app     
+          ## sudo -u uwsgi_user /opt/simplerestapi/venv/bin/uwsgi --socket :8000 --protocol http --wsgi-file wsgi.py --callable app
 
           echo "Start uWSGI service......"
           systemctl daemon-reload
