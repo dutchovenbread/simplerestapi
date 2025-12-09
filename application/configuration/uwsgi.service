@@ -8,7 +8,7 @@ User=uwsgi_user
 Group=uwsgi_group
 WorkingDirectory=/opt/simplerestapi
 Environment="PATH=/opt/simplerestapi"
-ExecStart=/opt/simplerestapi/venv/bin/uwsgi --workers 3 --socket unix:/run/uwsgi.sock  --log-level debug --wsgi-file wsgi.py --logto /opt/simplerestapi/app_errors.log
+ExecStart=/opt/simplerestapi/venv/bin/uwsgi --workers 3 --socket unix:/run/uwsgi.sock --wsgi-file wsgi.py --logto /opt/simplerestapi/app_errors.log
 Restart=always
 
 [Install]
