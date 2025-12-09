@@ -2,7 +2,7 @@
 Description=uWSGI socket for myproject
 
 [Socket]
-ListenStream=/run/wsgi.sock
+ListenStream=/run/uwsgi.sock
 
 [Install]
 WantedBy=sockets.target
